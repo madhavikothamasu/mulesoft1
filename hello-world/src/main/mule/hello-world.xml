@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cd5227d2-b8dd-4311-8806-32fe6c109f9c" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="feb12fad-6228-4f0f-aca6-70faf05b70b4" />
+	<flow name="hello-worldFlow" doc:id="6fd06f1d-4a75-47ec-9bb1-1a694405bb00" >
+		<http:listener doc:name="Listener" doc:id="98e408d2-fc04-4361-a3d4-760c3f878913" config-ref="HTTP_Listener_config" path="/file"/>
+		<file:read doc:name="reading a file from local machine" doc:id="91d6a995-0ca7-47bb-a692-6d81761e2ba0" path="C:\Users\ADMIN\Desktop\aaa.txt"/>
+		<file:write doc:name="Write" doc:id="97e4a78e-971c-4634-a6a8-917c64198084" config-ref="File_Config" path="C:\Users\ADMIN\Desktop\bbb"/>
+		<logger level="INFO" doc:name="Logger" doc:id="69d7d26a-07f2-4697-96eb-75a47bae9444" message="#[payload]"/>
+	</flow>
+	<flow name="hello-worldFlow1" doc:id="10ead7c0-d25f-4174-bb6d-174d30bda077" >
+		<file:listener doc:name="On New or Updated File" doc:id="cd949b5f-740d-4109-b47e-ca29fff65988" config-ref="File_Config" directory="C:\Users\ADMIN\Desktop\aaa" moveToDirectory="C:\Users\ADMIN\Desktop\bbb">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</file:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="ef5a0878-9670-4923-b83b-1bf64f61d9c7" message="#[payload]"/>
+	</flow>
+</mule>
